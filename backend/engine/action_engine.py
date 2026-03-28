@@ -1,6 +1,6 @@
 import random
 
-class ActionAgent:
+class ActionEngine:
     def __init__(self):
         self.name = "Action Execution Agent"
 

@@ -5,7 +5,7 @@ from agents.resource_agent import ResourceOptimizationAgent
 from agents.sla_agent import SLAAgent # New Import
 from engine.decision_engine import DecisionEngine
 from engine.audit_engine import AuditEngine
-from engine.action_agent import ActionAgent
+from engine.action_engine import ActionEngine
 
 router = APIRouter()
 
@@ -16,7 +16,7 @@ resource_tool = ResourceOptimizationAgent()
 sla_tool = SLAAgent() # Initialize
 engine = DecisionEngine()
 audit_tool = AuditEngine()
-action_tool = ActionAgent()
+action_tool = ActionEngine()
 
 @router.post("/run-full-loop")
 async def run_autonomous_loop():
