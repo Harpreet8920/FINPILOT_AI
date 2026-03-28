@@ -1,0 +1,14 @@
+[
+    {
+        "resource_id": "srv-9902",
+        "name": "Legacy Database",
+        "usage_percent": 12,
+        "monthly_cost": 450
+    },
+    {
+        "resource_id": "srv-1123",
+        "name": "Production API",
+        "usage_percent": 85,
+        "monthly_cost": 1200
+    }
+]
