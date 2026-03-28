@@ -1,44 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import api from '../services/api';
-import { DollarSign, Zap, ShieldCheck } from 'lucide-react';
-import MetricCard from '../components/MetricCard';
+import WorkflowStep from '../components/WorkflowStep';
 import Timeline from '../components/Timeline';
+import MetricCard from '../components/MetricCard';
 
 const Dashboard = () => {
   const [logs, setLogs] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0); // 0: Idle, 1: Monitor, 2: Analyze, 3: SLA, 4: Act
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await api.getHistory();
-      setLogs(data);
-    };
-    loadData();
-  }, []);
+  const runAutonomousLoop = async () => {
+    setIsProcessing(true);
+    
+    // Step 1: Monitoring
+    setCurrentStep(1);
+    await new Promise(r => setTimeout(r, 1000)); // Visual delay
+    
+    // Step 2: AI Analysis
+    setCurrentStep(2);
+    await new Promise(r => setTimeout(r, 1500));
 
-  const totalSavings = logs.reduce((acc, log) => 
-    acc + (parseFloat(log.analysis?.potential_monthly_savings) || 0), 0
-  );
+    // Step 3: SLA Verification
+    setCurrentStep(3);
+    await new Promise(r => setTimeout(r, 1000));
+
+    try {
+      // Step 4: Execution (Actual Backend Call)
+      setCurrentStep(4);
+      const result = await api.runLoop();
+      
+      // Refresh History
+      const updatedLogs = await api.getHistory();
+      setLogs(updatedLogs);
+    } catch (error) {
+      console.error("Agent Loop Failed", error);
+    } finally {
+      setIsProcessing(false);
+      setCurrentStep(0);
+    }
+  };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* 1. Metrics Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <MetricCard label="Total Savings" value={`$${totalSavings.toFixed(2)}`} icon={DollarSign} trend="+12%" />
-        <MetricCard label="Active Agents" value="4/4" icon={Zap} />
-        <MetricCard label="SLA Score" value="99.9%" icon={ShieldCheck} />
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Agent Control Center</h1>
+        <button 
+          onClick={runAutonomousLoop}
+          disabled={isProcessing}
+          className={`px-6 py-2 rounded-lg font-bold text-white transition-all ${
+            isProcessing ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200'
+          }`}
+        >
+          {isProcessing ? 'Agents Active...' : 'Start Autonomous Loop'}
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* 2. Timeline (Past History) */}
-        <div className="lg:col-span-2">
-          <h2 className="text-lg font-bold mb-4">Action Timeline</h2>
-          <Timeline items={logs} />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left: Live Workflow */}
+        <div className="bg-white p-6 rounded-xl border border-gray-100">
+          <h2 className="text-sm font-bold text-gray-400 uppercase mb-4">Live Execution</h2>
+          <WorkflowStep 
+            step="Monitoring Agent" 
+            status={currentStep === 1 ? 'active' : currentStep > 1 ? 'completed' : 'idle'}
+            description="Scanning cloud resources for cost anomalies..."
+          />
+          <WorkflowStep 
+            step="Analysis Agent" 
+            status={currentStep === 2 ? 'active' : currentStep > 2 ? 'completed' : 'idle'}
+            description="Calculating potential ROI and resource impact..."
+          />
+          <WorkflowStep 
+            step="SLA Guard" 
+            status={currentStep === 3 ? 'active' : currentStep > 3 ? 'completed' : 'idle'}
+            description="Verifying compliance with performance requirements..."
+          />
+          <WorkflowStep 
+            step="Action Agent" 
+            status={currentStep === 4 ? 'active' : currentStep > 4 ? 'completed' : 'idle'}
+            description="Executing final resource optimization..."
+          />
         </div>
-        
-        {/* 3. Workflow (Current AI Process) */}
-        <div>
-          <h2 className="text-lg font-bold mb-4">Live Execution Loop</h2>
-          {/* Your WorkflowStep components would go here */}
+
+        {/* Right: History Timeline */}
+        <div className="lg:col-span-2">
+          <h2 className="text-sm font-bold text-gray-400 uppercase mb-4">Audit Trail</h2>
+          <Timeline items={logs} />
         </div>
       </div>
     </div>
