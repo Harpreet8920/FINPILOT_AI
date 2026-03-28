@@ -3,7 +3,9 @@
         "resource_id": "srv-9902",
         "name": "Legacy Database",
         "usage_percent": 12,
-        "monthly_cost": 450
+        "monthly_cost": 450,
+        "criticality": "Low",
+        "uptime_sla": 99.0
     },
     {
         "resource_id": "srv-1123",
