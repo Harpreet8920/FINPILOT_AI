@@ -1,33 +1,45 @@
 from fastapi import APIRouter
 from agents.monitoring_agent import MonitoringAgent
-from agents.spend_agent import SpendAgent  # New Import
+from agents.spend_agent import SpendAgent
+from agents.resource_agent import ResourceOptimizationAgent  # New Import
 from engine.decision_engine import DecisionEngine
 
 router = APIRouter()
 monitor = MonitoringAgent()
-spend_tool = SpendAgent()  # Initialize
+spend_tool = SpendAgent()
+resource_tool = ResourceOptimizationAgent()  # Initialize
 engine = DecisionEngine()
 
 @router.post("/analyze")
 async def run_full_analysis():
-    # 1. Monitor (Detect issues)
+    # 1. Monitor
     anomalies = monitor.scan_data()
     if not anomalies:
-        return {"message": "No issues detected."}
+        return {"message": "System optimized."}
 
-    # 2. Spend Analysis (Calculate Financial Impact)
-    financial_impact = spend_tool.calculate_savings(anomalies[0])
+    target = anomalies[0]
 
-    # 3. Decide (AI Reasoning)
-    # Combine data for the AI to see both technical and financial info
-    combined_data = {**anomalies[0], **financial_impact}
-    ai_decision = engine.analyze_anomaly(combined_data)
+    # 2. Spend Analysis
+    financials = spend_tool.calculate_savings(target)
+
+    # 3. Resource Analysis
+    tech_specs = resource_tool.analyze_utilization(target)
+
+    # 4. Decide (Combine Technical + Financial data for AI)
+    full_context = {
+        "technical_data": target,
+        "financial_impact": financials,
+        "resource_metrics": tech_specs
+    }
+    
+    ai_decision = engine.analyze_anomaly(full_context)
     
     return {
         "status": "Success",
-        "analysis": {
-            "technical_details": anomalies[0],
-            "financial_impact": financial_impact,
-            "ai_recommendation": ai_decision
+        "data": {
+            "resource": target["name"],
+            "technical_report": tech_specs,
+            "financial_report": financials,
+            "ai_reasoning": ai_decision
         }
     }
