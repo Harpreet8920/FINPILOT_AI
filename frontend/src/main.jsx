@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Dashboard from './Dashboard' // Make sure this matches your filename
-import './index.css' // Ensure this file exists for Tailwind/CSS
+// Update this line to point to the pages folder
+import Dashboard from './pages/Dashboard.jsx' 
+import './styles/global.css' // Adjust if your CSS is in the styles folder
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
