@@ -2,20 +2,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import api_routes
 
-app = FastAPI(title="FinPilot AI Backend") [cite: 3]
+app = FastAPI()
 
-# Enable CORS so your React frontend can talk to this API [cite: 242]
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # Standard Vite port
+    allow_origins=["http://localhost:5173"], # Your Vite dev server URL
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"], # Allow GET, POST, etc.
+    allow_headers=["*"], # Allow all headers
 )
 
-# Include the routes for agents and data [cite: 188]
 app.include_router(api_routes.router)
 
-@app.get("/")
-async def root():
-    return {"status": "FinPilot AI Backend is running"} [cite: 3]
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
