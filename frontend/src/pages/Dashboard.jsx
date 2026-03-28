@@ -8,7 +8,18 @@ const Dashboard = () => {
   const [logs, setLogs] = useState([]);
   const [currentStep, setCurrentStep] = useState(0); // 0: Idle, 1: Monitor, 2: Analyze, 3: SLA, 4: Act
   const [isProcessing, setIsProcessing] = useState(false);
-
+  // Add this inside your Dashboard component, above runAutonomousLoop
+useEffect(() => {
+  const fetchInitialData = async () => {
+    try {
+      const data = await api.getHistory();
+      setLogs(data);
+    } catch (err) {
+      console.error("Initial fetch failed:", err);
+    }
+  };
+  fetchInitialData();
+}, []);
   const runAutonomousLoop = async () => {
     setIsProcessing(true);
     
@@ -90,3 +101,4 @@ const Dashboard = () => {
     </div>
   );
 };
+export default Dashboard;
