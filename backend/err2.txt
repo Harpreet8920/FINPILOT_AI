@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\harpreet\FINPILOT_AI\backend\main.py", line 6, in <module>
+    from routes import api_routes
+  File "C:\Users\harpreet\FINPILOT_AI\backend\routes\api_routes.py", line 17, in <module>
+    engine = DecisionEngine()
+             ^^^^^^^^^^^^^^^^
+  File "C:\Users\harpreet\FINPILOT_AI\backend\engine\decision_engine.py", line 9, in __init__
+    self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\harpreet\AppData\Local\Programs\Python\Python312\Lib\site-packages\openai\_client.py", line 137, in __init__
+    raise OpenAIError(
+openai.OpenAIError: The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable

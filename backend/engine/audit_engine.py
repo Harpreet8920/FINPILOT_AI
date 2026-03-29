@@ -30,3 +30,13 @@ class AuditEngine: # Changed name to match file
             return {"status": "Logged Successfully"}
         except Exception as e:
             return {"status": "Error Logging", "error": str(e)}
+
+    def get_history(self):
+        """Retrieves all logs"""
+        if os.path.exists(self.log_path):
+            with open(self.log_path, "r") as f:
+                try:
+                    return json.load(f)
+                except json.JSONDecodeError:
+                    return []
+        return []

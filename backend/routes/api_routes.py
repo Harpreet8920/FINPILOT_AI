@@ -53,3 +53,7 @@ async def run_autonomous_loop():
     audit_tool.log_action(final_report)
 
     return final_report
+
+@router.get("/history")
+async def get_history():
+    return audit_tool.get_history()
