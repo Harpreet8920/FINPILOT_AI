@@ -13,7 +13,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# ... (existing imports and app setup)
 
+# Add this specific route
+@app.get("/logs")
+def get_logs():
+    return [
+        {"timestamp": "2026-03-29 19:30:00", "action": "System Initialized"},
+        {"timestamp": "2026-03-29 19:30:05", "action": "Monitoring Agent: Scanning Cloud Storage"},
+        {"timestamp": "2026-03-29 19:30:10", "action": "Analysis Agent: Processing ROI metrics"}
+    ]
+
+# If you are using 'history' instead of 'logs' in your frontend, 
+# you can just alias it like this:
+@app.get("/history")
+def get_history():
+    return get_logs()
+
+# ... (rest of your file)
 @app.get("/")
 def health_check():
     return {"status": "success", "message": "FinPilot Backend is Live"}

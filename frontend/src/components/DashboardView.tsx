@@ -33,7 +33,7 @@ export default function DashboardView() {
         animate={{ opacity: 1, y: 0 }}
         className="flex justify-between items-end"
       >
-        <div>
+        <div className="bg-surface">
           <h1 className="font-headline text-4xl font-bold tracking-tight text-white mb-2">Operations Overview</h1>
           <p className="text-on-surface-variant font-label text-sm tracking-wide">Real-time intelligence from FinPilot AI clusters.</p>
         </div>
